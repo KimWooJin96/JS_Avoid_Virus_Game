@@ -2,12 +2,21 @@
 
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
+const playBtn = document.querySelector(".game__button");
+const timer = document.querySelector(".game__timer");
 
 const carrot = "/img/carrot.png";
 const bug = "/img/bug.png";
 
 const CARROT_SIZE = 80;
 const BUG_SIZE = 50;
+
+let time = 10;
+
+function setTimer() {
+  time -= 1;
+  timer.innerText = `0:${time}`;
+}
 
 function rightOrLeft(item) {
   let rightOrLeft = 1;
@@ -65,8 +74,12 @@ function createImg(img, count) {
 }
 
 function init() {
-  createImg(carrot, 10);
-  createImg(bug, 10);
+  playBtn.addEventListener("click", () => {
+    createImg(carrot, 10);
+    createImg(bug, 10);
+
+    setInterval(setTimer, 1000);
+  });
 }
 
 init();
