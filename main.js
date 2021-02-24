@@ -9,42 +9,44 @@ const bug = "/img/bug.png";
 const CARROT_SIZE = 80;
 const BUG_SIZE = 50;
 
-function randomX(img) {
+function rightOrLeft(item) {
   let rightOrLeft = 1;
   let X = 0;
-  if (img === carrot) {
-    rightOrLeft = Math.round(Math.random()) ? 1 : -1;
-    if (rightOrLeft === -1) {
-      X = Math.floor(Math.random() * (fieldRect.width / 2 + 1)) * -1;
-    } else {
-      X = Math.floor(Math.random() * (fieldRect.width / 2 - CARROT_SIZE + 1));
-    }
+
+  rightOrLeft = Math.round(Math.random()) ? 1 : -1;
+  if (rightOrLeft === -1) {
+    X = Math.floor(Math.random() * (fieldRect.width / 2 + 1)) * -1;
   } else {
-    rightOrLeft = Math.round(Math.random()) ? 1 : -1;
-    if (rightOrLeft === -1) {
-      X = Math.floor(Math.random() * (fieldRect.width / 2 + 1)) * -1;
-    } else {
-      X = Math.floor(Math.random() * (fieldRect.width / 2 - BUG_SIZE + 1));
-    }
+    X = Math.floor(Math.random() * (fieldRect.width / 2 - item + 1));
   }
+
   return X;
 }
 
-function randomY(img) {
-  let Y = 0;
+function randomX(img) {
+  let Xpos = 0;
   if (img === carrot) {
-    Y = Math.floor(Math.random() * (fieldRect.height - CARROT_SIZE + 1));
+    Xpos = rightOrLeft(CARROT_SIZE);
   } else {
-    Y = Math.floor(Math.random() * (fieldRect.height - BUG_SIZE + 1));
+    Xpos = rightOrLeft(BUG_SIZE);
   }
-  return Y;
+  return Xpos;
+}
+
+function randomY(img) {
+  let Ypos = 0;
+  if (img === carrot) {
+    Ypos = Math.floor(Math.random() * (fieldRect.height - CARROT_SIZE + 1));
+  } else {
+    Ypos = Math.floor(Math.random() * (fieldRect.height - BUG_SIZE + 1));
+  }
+  return Ypos;
 }
 
 function createImg(img, count) {
   let index = 0;
 
   for (let i = 0; i < count; i++) {
-    console.log(i);
     const newImg = document.createElement("img");
     newImg.setAttribute("src", `${img}`);
     newImg.id = index;
