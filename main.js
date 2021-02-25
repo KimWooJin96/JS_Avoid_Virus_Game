@@ -18,9 +18,24 @@ const popUpMessage = popUp.querySelector(".pop-up__message");
 const carrot = "/img/carrot.png";
 const bug = "/img/bug.png";
 
+const carrotSound = new Audio("/sound/carrot_pull.mp3");
+const bugSound = new Audio("/sound/bug_pull.mp3");
+const alertSound = new Audio("/sound/alert.wav");
+const winSound = new Audio("/sound/game_win.mp3");
+const bgSound = new Audio("/sound/bg.mp3");
+
 let time = REMAIN_TIME;
 let gameStart = false;
 let timerGo;
+
+function playAudio(sound) {
+  sound.currentTime = 0;
+  sound.play();
+}
+
+function stopAudio(sound) {
+  sound.pause();
+}
 
 function hideStopBtn() {
   playBtn.style.visibility = "hidden";
@@ -56,6 +71,7 @@ function countLeftCarrots() {
 
   if (leftCarrots === 0) {
     finishGame("You Won!");
+    playAudio(winSound);
   }
 }
 
@@ -137,6 +153,7 @@ function createImg(img, count, className) {
 
 function finishGame(text) {
   gameStart = false;
+  stopAudio(bgSound);
   clearInterval(timerGo);
   showPopUp(text);
   hideStopBtn();
@@ -144,12 +161,14 @@ function finishGame(text) {
 
 function stopGame() {
   gameStart = false;
+  stopAudio(bgSound);
   stopTimer();
   showPopUp("Try again?");
   hideStopBtn();
 }
 
 function playGame() {
+  playAudio(bgSound);
   gameStart = true;
   field.innerHTML = "";
   createImg(carrot, CARROT_COUNT, "carrot");
@@ -172,6 +191,8 @@ popUpRefreshBtn.addEventListener("click", () => {
   time = REMAIN_TIME;
   gameStart = false;
 
+  playAudio(alertSound);
+
   popUp.classList.add("pop-up--hide");
   showStartBtn();
   stopTimer();
@@ -184,13 +205,16 @@ field.addEventListener("click", (event) => {
   }
   const target = event.target;
   if (target.matches(".carrot")) {
+    playAudio(carrotSound);
     field.removeChild(target);
     countLeftCarrots();
   } else if (target.matches(".bug")) {
+    playAudio(bugSound);
     finishGame("Try Again?");
   }
 });
 
 playBtn.addEventListener("click", () => {
+  playAudio(alertSound);
   handleGame();
 });

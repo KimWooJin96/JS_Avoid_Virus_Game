@@ -6,6 +6,7 @@ button {
 
 body {
   text-align: center;
+  background-color: black;
 }
 
 img {
@@ -56,12 +57,13 @@ img {
   border-radius: 20px;
   font-weight: bold;
   visibility: hidden;
+  user-select: none;
 }
 
 .game__leftcarrot {
   width: 50px;
   height: 50px;
-  font-size: 46px;
+  font-size: 38px;
   margin-top: 8px;
   color: white;
   background-color: darksalmon;
@@ -70,6 +72,7 @@ img {
   text-align: center;
   line-height: 50px;
   visibility: hidden;
+  user-select: none;
 }
 
 /* game field */
@@ -80,6 +83,7 @@ img {
   margin-top: 40px;
 }
 
+/* popup */
 .pop-up {
   width: 400px;
   height: 140px;
@@ -103,9 +107,25 @@ img {
   background-color: wheat;
   border: 2px solid black;
   border-radius: 50%;
+  transition: transform 300ms ease-in;
+}
+
+.pop-up__icon:hover {
+  transform: scale(1.1);
 }
 
 .pop-up__message {
   display: block;
   font-size: 38px;
+}
+
+.carrot,
+.bug {
+  transition: transform 300ms ease-in;
+  cursor: pointer;
+}
+
+.carrot:hover,
+.bug:hover {
+  transform: scale(1.1);
 }
