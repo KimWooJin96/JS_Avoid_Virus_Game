@@ -84,6 +84,7 @@ function playTimer() {
   const second = time % 60;
   timer.innerText = `${minute}:${second}`;
   if (time <= 0) {
+    playAudio(bugSound);
     finishGame("Try Again?");
     return;
   }
@@ -154,7 +155,6 @@ function createImg(img, count, className) {
 function finishGame(text) {
   gameStart = false;
   stopAudio(bgSound);
-  playAudio(bugSound);
 
   clearInterval(timerGo);
   showPopUp(text);
@@ -211,6 +211,7 @@ field.addEventListener("click", (event) => {
     field.removeChild(target);
     countLeftCarrots();
   } else if (target.matches(".bug")) {
+    playAudio(bugSound);
     finishGame("Try Again?");
   }
 });
