@@ -4,6 +4,7 @@ const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
 const playBtn = document.querySelector(".game__button");
 const timer = document.querySelector(".game__timer");
+const leftCarrotsNum = document.querySelector(".game__leftcarrot");
 
 const carrot = "/img/carrot.png";
 const bug = "/img/bug.png";
@@ -12,6 +13,10 @@ const CARROT_SIZE = 80;
 const BUG_SIZE = 50;
 
 let time = 9;
+
+function countLeftCarrots(leftCarrots) {
+  leftCarrotsNum.innerText = `${leftCarrots}`;
+}
 
 function setTimer() {
   time -= 1;
@@ -84,7 +89,9 @@ function init() {
     createImg(carrot, 9, "carrot");
     createImg(bug, 9, "bug");
     setInterval(setTimer, 1000);
-    const images = document.querySelectorAll("");
+    const images = document.querySelectorAll(".carrot");
+    const leftCarrots = images.length;
+    countLeftCarrots(leftCarrots);
   });
 }
 
