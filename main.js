@@ -11,11 +11,16 @@ const bug = "/img/bug.png";
 const CARROT_SIZE = 80;
 const BUG_SIZE = 50;
 
-let time = 10;
+let time = 9;
 
 function setTimer() {
   time -= 1;
   timer.innerText = `0:${time}`;
+  if (time <= 0) {
+    timer.innerText = `0:0`;
+    return;
+  }
+  console.log("1");
 }
 
 function rightOrLeft(item) {
@@ -52,12 +57,13 @@ function randomY(img) {
   return Ypos;
 }
 
-function createImg(img, count) {
+function createImg(img, count, className) {
   let index = 0;
 
   for (let i = 0; i < count; i++) {
     const newImg = document.createElement("img");
     newImg.setAttribute("src", `${img}`);
+    newImg.setAttribute("class", `${className}`);
     newImg.id = index;
     field.appendChild(newImg);
 
@@ -75,10 +81,10 @@ function createImg(img, count) {
 
 function init() {
   playBtn.addEventListener("click", () => {
-    createImg(carrot, 10);
-    createImg(bug, 10);
-
+    createImg(carrot, 9, "carrot");
+    createImg(bug, 9, "bug");
     setInterval(setTimer, 1000);
+    const images = document.querySelectorAll("");
   });
 }
 
