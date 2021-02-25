@@ -13,9 +13,9 @@ const carrot = "/img/carrot.png";
 const bug = "/img/bug.png";
 
 const CARROT_SIZE = 80;
-const CARROT_COUNT = 9;
+const CARROT_COUNT = 10;
 const BUG_SIZE = 50;
-const BUG_COUNT = 9;
+const BUG_COUNT = 10;
 const REMAIN_TIME = 10;
 
 let time = REMAIN_TIME;
@@ -27,14 +27,13 @@ function handlePopUpBtn() {
   gameStart = false;
   showStartBtn();
   popUp.classList.add("pop-up--hide");
-  clearInterval(timerGo);
-
+  stopTimer();
   handleGame();
 }
 
-function showResetPopUp() {
+function showPopUp(text) {
   popUp.classList.remove("pop-up--hide");
-  popUpMessage.innerText = `Try again?`;
+  popUpMessage.innerText = text;
 }
 
 function hideStopBtn() {
@@ -63,6 +62,12 @@ function countLeftCarrots() {
   const images = document.querySelectorAll(".carrot");
   const leftCarrots = images.length;
   countCarrots.innerText = `${leftCarrots}`;
+
+  if (leftCarrots === 0) {
+    stopTimer();
+    showPopUp("You Won!");
+    popUpIcon.addEventListener("click", handlePopUpBtn);
+  }
 }
 
 function stopTimer() {
@@ -75,7 +80,7 @@ function playTimer() {
   timer.innerText = `${minute}:${second}`;
   if (time <= 0) {
     clearInterval(timerGo);
-    showResetPopUp();
+    showPopUp("Try again?");
     hideStopBtn();
     popUpIcon.addEventListener("click", handlePopUpBtn);
     return;
@@ -146,7 +151,7 @@ function createImg(img, count, className) {
 
 function stopGame() {
   stopTimer();
-  showResetPopUp();
+  showPopUp("Try again?");
   hideStopBtn();
   popUpIcon.addEventListener("click", handlePopUpBtn);
 }
@@ -159,6 +164,24 @@ function playGame() {
   showTimerAndLeftCarrots();
   showPauseBtn();
   setTimer();
+
+  const carrots = document.querySelectorAll(".carrot");
+  carrots.forEach((carrot) => {
+    carrot.addEventListener("click", (event) => {
+      const carrotImg = event.target;
+      field.removeChild(carrotImg);
+      countLeftCarrots();
+    });
+  });
+
+  const bugs = document.querySelectorAll(".bug");
+  bugs.forEach((bug) => {
+    bug.addEventListener("click", () => {
+      showPopUp("Try again?");
+      stopTimer();
+      popUpIcon.addEventListener("click", handlePopUpBtn);
+    });
+  });
 }
 
 function handleGame() {
