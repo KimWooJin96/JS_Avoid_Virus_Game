@@ -15,6 +15,8 @@ const BUG_SIZE = 50;
 const BUG_COUNT = 9;
 
 let time = 9;
+let gameStart = false;
+let timerGo;
 
 function showPauseBtn() {
   const fa_play = playBtn.querySelector("i");
@@ -33,24 +35,24 @@ function countLeftCarrots() {
   countCarrots.innerText = `${leftCarrots}`;
 }
 
-function setTimer() {
+function playTimer() {
   time -= 1;
   timer.innerText = `0:${time}`;
   if (time <= 0) {
     timer.innerText = `0:0`;
     return;
   }
-  console.log("1");
 }
 
-function playGame() {
-  setInterval(setTimer, 1000);
-  countLeftCarrots();
-  showTimerAndLeftCarrots();
-  showPauseBtn();
+function stopTimer() {
+  clearInterval(timerGo);
 }
 
-function rightOrLeft(item) {
+function setTimer() {
+  timerGo = setInterval(playTimer, 1000);
+}
+
+function ChooseRightOrLeft(item) {
   let rightOrLeft = 1;
   let X = 0;
 
@@ -67,9 +69,9 @@ function rightOrLeft(item) {
 function randomX(img) {
   let Xpos = 0;
   if (img === carrot) {
-    Xpos = rightOrLeft(CARROT_SIZE);
+    Xpos = ChooseRightOrLeft(CARROT_SIZE);
   } else {
-    Xpos = rightOrLeft(BUG_SIZE);
+    Xpos = ChooseRightOrLeft(BUG_SIZE);
   }
   return Xpos;
 }
@@ -106,12 +108,33 @@ function createImg(img, count, className) {
   }
 }
 
+function stopGame() {
+  console.log("stop");
+  stopTimer();
+}
+
+function playGame() {
+  field.innerHTML = "";
+  createImg(carrot, CARROT_COUNT, "carrot");
+  createImg(bug, BUG_COUNT, "bug");
+  countLeftCarrots();
+  showTimerAndLeftCarrots();
+  showPauseBtn();
+  setTimer();
+}
+
+function handleGame() {
+  if (!gameStart) {
+    playGame();
+  } else {
+    stopGame();
+  }
+  gameStart = !gameStart;
+}
+
 function init() {
   playBtn.addEventListener("click", () => {
-    field.innerHTML = "";
-    createImg(carrot, CARROT_COUNT, "carrot");
-    createImg(bug, BUG_COUNT, "bug");
-    playGame();
+    handleGame();
   });
 }
 
