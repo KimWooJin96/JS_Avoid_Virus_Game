@@ -55,6 +55,7 @@ img {
   margin-top: 8px;
   border-radius: 20px;
   font-weight: bold;
+  visibility: hidden;
 }
 
 .game__leftcarrot {
@@ -68,6 +69,7 @@ img {
   border-radius: 50%;
   text-align: center;
   line-height: 50px;
+  visibility: hidden;
 }
 
 /* game field */

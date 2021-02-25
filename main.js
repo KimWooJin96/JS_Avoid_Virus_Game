@@ -4,18 +4,33 @@ const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
 const playBtn = document.querySelector(".game__button");
 const timer = document.querySelector(".game__timer");
-const leftCarrotsNum = document.querySelector(".game__leftcarrot");
+const countCarrots = document.querySelector(".game__leftcarrot");
 
 const carrot = "/img/carrot.png";
 const bug = "/img/bug.png";
 
 const CARROT_SIZE = 80;
+const CARROT_COUNT = 9;
 const BUG_SIZE = 50;
+const BUG_COUNT = 9;
 
 let time = 9;
 
-function countLeftCarrots(leftCarrots) {
-  leftCarrotsNum.innerText = `${leftCarrots}`;
+function showPauseBtn() {
+  const fa_play = playBtn.querySelector("i");
+  fa_play.classList.add("fa-square");
+  fa_play.classList.remove("fa-play");
+}
+
+function showTimerAndLeftCarrots() {
+  timer.style.visibility = "visible";
+  countCarrots.style.visibility = "visible";
+}
+
+function countLeftCarrots() {
+  const images = document.querySelectorAll(".carrot");
+  const leftCarrots = images.length;
+  countCarrots.innerText = `${leftCarrots}`;
 }
 
 function setTimer() {
@@ -26,6 +41,13 @@ function setTimer() {
     return;
   }
   console.log("1");
+}
+
+function playGame() {
+  setInterval(setTimer, 1000);
+  countLeftCarrots();
+  showTimerAndLeftCarrots();
+  showPauseBtn();
 }
 
 function rightOrLeft(item) {
@@ -86,12 +108,10 @@ function createImg(img, count, className) {
 
 function init() {
   playBtn.addEventListener("click", () => {
-    createImg(carrot, 9, "carrot");
-    createImg(bug, 9, "bug");
-    setInterval(setTimer, 1000);
-    const images = document.querySelectorAll(".carrot");
-    const leftCarrots = images.length;
-    countLeftCarrots(leftCarrots);
+    field.innerHTML = "";
+    createImg(carrot, CARROT_COUNT, "carrot");
+    createImg(bug, BUG_COUNT, "bug");
+    playGame();
   });
 }
 
