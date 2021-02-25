@@ -5,6 +5,9 @@ const fieldRect = field.getBoundingClientRect();
 const playBtn = document.querySelector(".game__button");
 const timer = document.querySelector(".game__timer");
 const countCarrots = document.querySelector(".game__leftcarrot");
+const popUp = document.querySelector(".pop-up");
+const popUpIcon = document.querySelector(".pop-up__icon");
+const popUpMessage = popUp.querySelector(".pop-up__message");
 
 const carrot = "/img/carrot.png";
 const bug = "/img/bug.png";
@@ -13,10 +16,37 @@ const CARROT_SIZE = 80;
 const CARROT_COUNT = 9;
 const BUG_SIZE = 50;
 const BUG_COUNT = 9;
+const REMAIN_TIME = 10;
 
-let time = 9;
+let time = REMAIN_TIME;
 let gameStart = false;
 let timerGo;
+
+function handlePopUpBtn() {
+  time = REMAIN_TIME;
+  gameStart = false;
+  showStartBtn();
+  popUp.classList.add("pop-up--hide");
+  clearInterval(timerGo);
+
+  handleGame();
+}
+
+function showResetPopUp() {
+  popUp.classList.remove("pop-up--hide");
+  popUpMessage.innerText = `Try again?`;
+}
+
+function hideStopBtn() {
+  playBtn.style.visibility = "hidden";
+}
+
+function showStartBtn() {
+  const fa_square = playBtn.querySelector("i");
+  fa_square.classList.add("fa-play");
+  fa_square.classList.remove("fa-square");
+  playBtn.style.visibility = "visible";
+}
 
 function showPauseBtn() {
   const fa_play = playBtn.querySelector("i");
@@ -35,20 +65,26 @@ function countLeftCarrots() {
   countCarrots.innerText = `${leftCarrots}`;
 }
 
-function playTimer() {
-  time -= 1;
-  timer.innerText = `0:${time}`;
-  if (time <= 0) {
-    timer.innerText = `0:0`;
-    return;
-  }
-}
-
 function stopTimer() {
   clearInterval(timerGo);
 }
 
+function playTimer() {
+  const minute = Math.floor(time / 60);
+  const second = time % 60;
+  timer.innerText = `${minute}:${second}`;
+  if (time <= 0) {
+    clearInterval(timerGo);
+    showResetPopUp();
+    hideStopBtn();
+    popUpIcon.addEventListener("click", handlePopUpBtn);
+    return;
+  }
+  time -= 1;
+}
+
 function setTimer() {
+  playTimer();
   timerGo = setInterval(playTimer, 1000);
 }
 
@@ -109,8 +145,10 @@ function createImg(img, count, className) {
 }
 
 function stopGame() {
-  console.log("stop");
   stopTimer();
+  showResetPopUp();
+  hideStopBtn();
+  popUpIcon.addEventListener("click", handlePopUpBtn);
 }
 
 function playGame() {
