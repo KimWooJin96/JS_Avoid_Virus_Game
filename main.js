@@ -1,43 +1,34 @@
 "use strict";
 
-const field = document.querySelector(".game__field");
-const fieldRect = field.getBoundingClientRect();
-const playBtn = document.querySelector(".game__button");
-const timer = document.querySelector(".game__timer");
-const countCarrots = document.querySelector(".game__leftcarrot");
-const popUp = document.querySelector(".pop-up");
-const popUpIcon = document.querySelector(".pop-up__icon");
-const popUpMessage = popUp.querySelector(".pop-up__message");
-
-const carrot = "/img/carrot.png";
-const bug = "/img/bug.png";
-
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 10;
 const BUG_SIZE = 50;
 const BUG_COUNT = 10;
 const REMAIN_TIME = 10;
 
+const field = document.querySelector(".game__field");
+const fieldRect = field.getBoundingClientRect();
+const playBtn = document.querySelector(".game__button");
+const timer = document.querySelector(".game__timer");
+const countCarrots = document.querySelector(".game__leftcarrot");
+const popUp = document.querySelector(".pop-up");
+const popUpRefreshBtn = document.querySelector(".pop-up__icon");
+const popUpMessage = popUp.querySelector(".pop-up__message");
+
+const carrot = "/img/carrot.png";
+const bug = "/img/bug.png";
+
 let time = REMAIN_TIME;
 let gameStart = false;
 let timerGo;
 
-function handlePopUpBtn() {
-  time = REMAIN_TIME;
-  gameStart = false;
-  showStartBtn();
-  popUp.classList.add("pop-up--hide");
-  stopTimer();
-  handleGame();
+function hideStopBtn() {
+  playBtn.style.visibility = "hidden";
 }
 
 function showPopUp(text) {
   popUp.classList.remove("pop-up--hide");
   popUpMessage.innerText = text;
-}
-
-function hideStopBtn() {
-  playBtn.style.visibility = "hidden";
 }
 
 function showStartBtn() {
@@ -64,9 +55,7 @@ function countLeftCarrots() {
   countCarrots.innerText = `${leftCarrots}`;
 
   if (leftCarrots === 0) {
-    stopTimer();
-    showPopUp("You Won!");
-    popUpIcon.addEventListener("click", handlePopUpBtn);
+    finishGame("You Won!");
   }
 }
 
@@ -79,10 +68,7 @@ function playTimer() {
   const second = time % 60;
   timer.innerText = `${minute}:${second}`;
   if (time <= 0) {
-    clearInterval(timerGo);
-    showPopUp("Try again?");
-    hideStopBtn();
-    popUpIcon.addEventListener("click", handlePopUpBtn);
+    finishGame("Try Again?");
     return;
   }
   time -= 1;
@@ -149,14 +135,22 @@ function createImg(img, count, className) {
   }
 }
 
+function finishGame(text) {
+  gameStart = false;
+  clearInterval(timerGo);
+  showPopUp(text);
+  hideStopBtn();
+}
+
 function stopGame() {
+  gameStart = false;
   stopTimer();
   showPopUp("Try again?");
   hideStopBtn();
-  popUpIcon.addEventListener("click", handlePopUpBtn);
 }
 
 function playGame() {
+  gameStart = true;
   field.innerHTML = "";
   createImg(carrot, CARROT_COUNT, "carrot");
   createImg(bug, BUG_COUNT, "bug");
@@ -164,24 +158,6 @@ function playGame() {
   showTimerAndLeftCarrots();
   showPauseBtn();
   setTimer();
-
-  const carrots = document.querySelectorAll(".carrot");
-  carrots.forEach((carrot) => {
-    carrot.addEventListener("click", (event) => {
-      const carrotImg = event.target;
-      field.removeChild(carrotImg);
-      countLeftCarrots();
-    });
-  });
-
-  const bugs = document.querySelectorAll(".bug");
-  bugs.forEach((bug) => {
-    bug.addEventListener("click", () => {
-      showPopUp("Try again?");
-      stopTimer();
-      popUpIcon.addEventListener("click", handlePopUpBtn);
-    });
-  });
 }
 
 function handleGame() {
@@ -190,13 +166,31 @@ function handleGame() {
   } else {
     stopGame();
   }
-  gameStart = !gameStart;
 }
 
-function init() {
-  playBtn.addEventListener("click", () => {
-    handleGame();
-  });
-}
+popUpRefreshBtn.addEventListener("click", () => {
+  time = REMAIN_TIME;
+  gameStart = false;
 
-init();
+  popUp.classList.add("pop-up--hide");
+  showStartBtn();
+  stopTimer();
+  handleGame();
+});
+
+field.addEventListener("click", (event) => {
+  if (!gameStart) {
+    return;
+  }
+  const target = event.target;
+  if (target.matches(".carrot")) {
+    field.removeChild(target);
+    countLeftCarrots();
+  } else if (target.matches(".bug")) {
+    finishGame("Try Again?");
+  }
+});
+
+playBtn.addEventListener("click", () => {
+  handleGame();
+});
