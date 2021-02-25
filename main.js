@@ -95,7 +95,7 @@ function setTimer() {
   timerGo = setInterval(playTimer, 1000);
 }
 
-function ChooseRightOrLeft(item) {
+function chooseRightOrLeft(item) {
   let rightOrLeft = 1;
   let X = 0;
 
@@ -112,9 +112,9 @@ function ChooseRightOrLeft(item) {
 function randomX(img) {
   let Xpos = 0;
   if (img === carrot) {
-    Xpos = ChooseRightOrLeft(CARROT_SIZE);
+    Xpos = chooseRightOrLeft(CARROT_SIZE);
   } else {
-    Xpos = ChooseRightOrLeft(BUG_SIZE);
+    Xpos = chooseRightOrLeft(BUG_SIZE);
   }
   return Xpos;
 }
@@ -154,6 +154,8 @@ function createImg(img, count, className) {
 function finishGame(text) {
   gameStart = false;
   stopAudio(bgSound);
+  playAudio(bugSound);
+
   clearInterval(timerGo);
   showPopUp(text);
   hideStopBtn();
@@ -209,7 +211,6 @@ field.addEventListener("click", (event) => {
     field.removeChild(target);
     countLeftCarrots();
   } else if (target.matches(".bug")) {
-    playAudio(bugSound);
     finishGame("Try Again?");
   }
 });
