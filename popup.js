@@ -1,6 +1,6 @@
 "use strict";
 
-const alertSound = new Audio("/sound/alert.wav");
+import * as Sound from "./sound.js";
 
 export default class PopUp {
   constructor() {
@@ -9,7 +9,7 @@ export default class PopUp {
     this.popUpMessage = this.popUp.querySelector(".pop-up__message");
 
     this.popUpRefreshBtn.addEventListener("click", () => {
-      playAudio(alertSound);
+      Sound.playAlert();
       this.popUp.classList.add("pop-up--hide");
       this.onClick && this.onClick();
     });
@@ -23,9 +23,4 @@ export default class PopUp {
     this.popUp.classList.remove("pop-up--hide");
     this.popUpMessage.innerText = text;
   }
-}
-
-function playAudio(sound) {
-  sound.currentTime = 0;
-  sound.play();
 }

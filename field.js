@@ -1,13 +1,11 @@
 "use strict";
 
+import * as Sound from "./sound.js";
+
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 10;
 const BUG_SIZE = 50;
 const BUG_COUNT = 10;
-
-const carrotSound = new Audio("/sound/carrot_pull.mp3");
-const bugSound = new Audio("/sound/bug_pull.mp3");
-const bgSound = new Audio("/sound/bg.mp3");
 
 export default class Field {
   constructor() {
@@ -21,11 +19,11 @@ export default class Field {
   onClick = (event) => {
     const target = event.target;
     if (target.matches(".carrot")) {
-      playAudio(carrotSound);
+      Sound.playCarrot();
       this.field.removeChild(target);
       this.onItemClick && this.onItemClick("carrot");
     } else if (target.matches(".bug")) {
-      playAudio(bugSound);
+      Sound.playBug();
       this.onItemClick && this.onItemClick("bug");
     }
   };
@@ -35,7 +33,7 @@ export default class Field {
   }
 
   set() {
-    playAudio(bgSound);
+    Sound.playBg();
     this.field.innerHTML = "";
     this.createImg(this.carrot, CARROT_COUNT, "carrot");
     this.createImg(this.bug, BUG_COUNT, "bug");

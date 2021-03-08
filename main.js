@@ -2,6 +2,7 @@
 
 import PopUp from "./popup.js";
 import Field from "./field.js";
+import * as Sound from "./sound.js";
 
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 10;
@@ -13,27 +14,12 @@ const playBtn = document.querySelector(".game__button");
 const timer = document.querySelector(".game__timer");
 const countCarrots = document.querySelector(".game__leftcarrot");
 
-const carrotSound = new Audio("/sound/carrot_pull.mp3");
-const bugSound = new Audio("/sound/bug_pull.mp3");
-const alertSound = new Audio("/sound/alert.wav");
-const winSound = new Audio("/sound/game_win.mp3");
-const bgSound = new Audio("/sound/bg.mp3");
-
 let time = REMAIN_TIME;
 let gameStart = false;
 let timerGo;
 
 const gameFinishBanner = new PopUp();
 const gameField = new Field();
-
-function playAudio(sound) {
-  sound.currentTime = 0;
-  sound.play();
-}
-
-function stopAudio(sound) {
-  sound.pause();
-}
 
 function hideStopBtn() {
   playBtn.style.visibility = "hidden";
@@ -65,7 +51,7 @@ function countLeftCarrots() {
 
   if (leftCarrots === 0) {
     finishGame("You Won!");
-    playAudio(winSound);
+    Sound.playWin();
   }
 }
 
@@ -78,7 +64,7 @@ function playTimer() {
   const second = time % 60;
   timer.innerText = `${minute}:${second}`;
   if (time <= 0) {
-    playAudio(bugSound);
+    Sound.bugSound();
     finishGame("Time Over!");
     return;
   }
@@ -92,7 +78,7 @@ function setTimer() {
 
 function finishGame(text) {
   gameStart = false;
-  stopAudio(bgSound);
+  Sound.stopBg();
   showStartBtn();
   clearInterval(timerGo);
 
@@ -104,7 +90,7 @@ function finishGame(text) {
 
 function stopGame() {
   gameStart = false;
-  stopAudio(bgSound);
+  Sound.stopBg();
   stopTimer();
   gameFinishBanner.show("Try again?");
   hideStopBtn();
@@ -136,7 +122,7 @@ gameField.setClickListener((item) => {
 });
 
 playBtn.addEventListener("click", () => {
-  playAudio(alertSound);
+  Sound.playAlert();
   if (!gameStart) {
     playGame();
   } else {
