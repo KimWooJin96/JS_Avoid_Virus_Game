@@ -1,6 +1,7 @@
 "use strict";
 
 import PopUp from "./popup.js";
+import Field from "./field.js";
 
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 10;
@@ -8,15 +9,9 @@ const BUG_SIZE = 50;
 const BUG_COUNT = 10;
 const REMAIN_TIME = 10;
 
-const field = document.querySelector(".game__field");
-const fieldRect = field.getBoundingClientRect();
-
 const playBtn = document.querySelector(".game__button");
 const timer = document.querySelector(".game__timer");
 const countCarrots = document.querySelector(".game__leftcarrot");
-
-const carrot = "/img/carrot.png";
-const bug = "/img/bug.png";
 
 const carrotSound = new Audio("/sound/carrot_pull.mp3");
 const bugSound = new Audio("/sound/bug_pull.mp3");
@@ -29,6 +24,7 @@ let gameStart = false;
 let timerGo;
 
 const gameFinishBanner = new PopUp();
+const gameField = new Field();
 
 function playAudio(sound) {
   sound.currentTime = 0;
@@ -94,69 +90,13 @@ function setTimer() {
   timerGo = setInterval(playTimer, 1000);
 }
 
-function chooseRightOrLeft(item) {
-  let rightOrLeft = 1;
-  let X = 0;
-
-  rightOrLeft = Math.round(Math.random()) ? 1 : -1;
-  if (rightOrLeft === -1) {
-    X = Math.floor(Math.random() * (fieldRect.width / 2 + 1)) * -1;
-  } else {
-    X = Math.floor(Math.random() * (fieldRect.width / 2 - item + 1));
-  }
-
-  return X;
-}
-
-function randomX(img) {
-  let Xpos = 0;
-  if (img === carrot) {
-    Xpos = chooseRightOrLeft(CARROT_SIZE);
-  } else {
-    Xpos = chooseRightOrLeft(BUG_SIZE);
-  }
-  return Xpos;
-}
-
-function randomY(img) {
-  let Ypos = 0;
-  if (img === carrot) {
-    Ypos = Math.floor(Math.random() * (fieldRect.height - CARROT_SIZE + 1));
-  } else {
-    Ypos = Math.floor(Math.random() * (fieldRect.height - BUG_SIZE + 1));
-  }
-  return Ypos;
-}
-
-function createImg(img, count, className) {
-  let index = 0;
-
-  for (let i = 0; i < count; i++) {
-    const newImg = document.createElement("img");
-    newImg.setAttribute("src", `${img}`);
-    newImg.setAttribute("class", `${className}`);
-    newImg.id = index;
-    field.appendChild(newImg);
-
-    const imgPositionX = randomX(img);
-    const imgPositionY = randomY(img);
-    // 가운데가 기준
-    newImg.style.transform = `translate(${imgPositionX}px, ${imgPositionY}px)`;
-    // 왼쪽이 기준
-    // newImg.style.top = `${0}px`;
-    // newImg.style.left = `${0}px`;
-
-    index += 1;
-  }
-}
-
 function finishGame(text) {
   gameStart = false;
   stopAudio(bgSound);
   showStartBtn();
   clearInterval(timerGo);
 
-  gameFinishBanner.showPopUp(text);
+  gameFinishBanner.show(text);
 
   hideStopBtn();
   stopTimer();
@@ -166,22 +106,16 @@ function stopGame() {
   gameStart = false;
   stopAudio(bgSound);
   stopTimer();
-  gameFinishBanner.showPopUp("Try again?");
+  gameFinishBanner.show("Try again?");
   hideStopBtn();
 }
 
 function playGame() {
-  playAudio(bgSound);
   gameStart = true;
-  field.innerHTML = "";
   time = REMAIN_TIME;
-
-  createImg(carrot, CARROT_COUNT, "carrot");
-  createImg(bug, BUG_COUNT, "bug");
-
+  gameField.set();
   countLeftCarrots();
   showTimerAndLeftCarrots();
-
   showPauseBtn();
   setTimer();
 }
@@ -190,17 +124,13 @@ gameFinishBanner.setClickListener(() => {
   playGame();
 });
 
-field.addEventListener("click", (event) => {
+gameField.setClickListener((item) => {
   if (!gameStart) {
     return;
   }
-  const target = event.target;
-  if (target.matches(".carrot")) {
-    playAudio(carrotSound);
-    field.removeChild(target);
+  if (item === "carrot") {
     countLeftCarrots();
-  } else if (target.matches(".bug")) {
-    playAudio(bugSound);
+  } else if (item === "bug") {
     finishGame("Try Again?");
   }
 });
