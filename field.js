@@ -55,35 +55,25 @@ export default class Field {
       const imgPositionX = this.randomX(img);
       const imgPositionY = this.randomY(img);
       // 가운데가 기준
-      newImg.style.transform = `translate(${imgPositionX}px, ${imgPositionY}px)`;
+      // newImg.style.transform = `translate(${imgPositionX}px, ${imgPositionY}px)`;
       // 왼쪽이 기준
-      // newImg.style.top = `${0}px`;
-      // newImg.style.left = `${0}px`;
+      newImg.style.top = `${imgPositionY}px`;
+      newImg.style.left = `${imgPositionX}px`;
 
       index += 1;
     }
   }
 
-  chooseRightOrLeft(item) {
-    let rightOrLeft = 1;
-    let X = 0;
-
-    rightOrLeft = Math.round(Math.random()) ? 1 : -1;
-    if (rightOrLeft === -1) {
-      X = Math.floor(Math.random() * (this.fieldRect.width / 2 + 1)) * -1;
-    } else {
-      X = Math.floor(Math.random() * (this.fieldRect.width / 2 - item + 1));
-    }
-
-    return X;
-  }
-
   randomX(img) {
     let Xpos = 0;
     if (img === this.carrot) {
-      Xpos = this.chooseRightOrLeft(this.carrotSize);
+      Xpos = Math.floor(
+        Math.random() * (this.fieldRect.width - this.carrotSize + 1)
+      );
     } else {
-      Xpos = this.chooseRightOrLeft(this.bugSize);
+      Xpos = Math.floor(
+        Math.random() * (this.fieldRect.width - this.bugSize + 1)
+      );
     }
     return Xpos;
   }
@@ -101,4 +91,42 @@ export default class Field {
     }
     return Ypos;
   }
+
+  // chooseRightOrLeft(item) {
+  //   let rightOrLeft = 1;
+  //   let X = 0;
+
+  //   rightOrLeft = Math.round(Math.random()) ? 1 : -1;
+  //   if (rightOrLeft === -1) {
+  //     X = Math.floor(Math.random() * (this.fieldRect.width / 2 + 1)) * -1;
+  //   } else {
+  //     X = Math.floor(Math.random() * (this.fieldRect.width / 2 - item + 1));
+  //   }
+
+  //   return X;
+  // }
+
+  // randomX(img) {
+  //   let Xpos = 0;
+  //   if (img === this.carrot) {
+  //     Xpos = this.chooseRightOrLeft(this.carrotSize);
+  //   } else {
+  //     Xpos = this.chooseRightOrLeft(this.bugSize);
+  //   }
+  //   return Xpos;
+  // }
+
+  // randomY(img) {
+  //   let Ypos = 0;
+  //   if (img === this.carrot) {
+  //     Ypos = Math.floor(
+  //       Math.random() * (this.fieldRect.height - this.carrotSize + 1)
+  //     );
+  //   } else {
+  //     Ypos = Math.floor(
+  //       Math.random() * (this.fieldRect.height - this.bugSize + 1)
+  //     );
+  //   }
+  //   return Ypos;
+  // }
 }
