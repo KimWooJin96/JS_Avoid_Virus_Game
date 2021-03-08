@@ -9,6 +9,11 @@ const BUG_COUNT = 10;
 
 export default class Field {
   constructor() {
+    this.carrotSize = CARROT_SIZE;
+    this.carrotCount = CARROT_COUNT;
+    this.bugSize = BUG_SIZE;
+    this.bugCount = BUG_COUNT;
+
     this.carrot = "/img/carrot.png";
     this.bug = "/img/bug.png";
     this.field = document.querySelector(".game__field");
@@ -35,8 +40,8 @@ export default class Field {
   set() {
     Sound.playBg();
     this.field.innerHTML = "";
-    this.createImg(this.carrot, CARROT_COUNT, "carrot");
-    this.createImg(this.bug, BUG_COUNT, "bug");
+    this.createImg(this.carrot, this.carrotCount, "carrot");
+    this.createImg(this.bug, this.bugCount, "bug");
   }
 
   createImg(img, count, className) {
@@ -78,9 +83,9 @@ export default class Field {
   randomX(img) {
     let Xpos = 0;
     if (img === this.carrot) {
-      Xpos = this.chooseRightOrLeft(CARROT_SIZE);
+      Xpos = this.chooseRightOrLeft(this.carrotSize);
     } else {
-      Xpos = this.chooseRightOrLeft(BUG_SIZE);
+      Xpos = this.chooseRightOrLeft(this.bugSize);
     }
     return Xpos;
   }
@@ -89,16 +94,13 @@ export default class Field {
     let Ypos = 0;
     if (img === this.carrot) {
       Ypos = Math.floor(
-        Math.random() * (this.fieldRect.height - CARROT_SIZE + 1)
+        Math.random() * (this.fieldRect.height - this.carrotSize + 1)
       );
     } else {
-      Ypos = Math.floor(Math.random() * (this.fieldRect.height - BUG_SIZE + 1));
+      Ypos = Math.floor(
+        Math.random() * (this.fieldRect.height - this.bugSize + 1)
+      );
     }
     return Ypos;
   }
-}
-
-function playAudio(sound) {
-  sound.currentTime = 0;
-  sound.play();
 }

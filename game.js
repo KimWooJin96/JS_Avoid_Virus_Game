@@ -3,12 +3,33 @@
 import Field from "./field.js";
 import * as Sound from "./sound.js";
 
-const REMAIN_TIME = 10;
-let time = REMAIN_TIME;
+export default class GameBuilder {
+  withCarrotCount(num) {
+    this.carrotCount = num;
+    return this;
+  }
 
-export default class Game {
-  constructor() {
+  withBugCount(num) {
+    this.bugCount = num;
+    return this;
+  }
+
+  withDurationTime(sec) {
+    this.durationTime = sec;
+    return this;
+  }
+
+  build() {
+    return new Game(this.carrotCount, this.bugCount, this.durationTime);
+  }
+}
+class Game {
+  constructor(carrotCount, bugCount, durationTime) {
     this.gameField = new Field();
+
+    this.carrotCount = carrotCount;
+    this.bugCount = bugCount;
+    this.durationTime = durationTime;
 
     this.playBtn = document.querySelector(".game__button");
     this.timer = document.querySelector(".game__timer");
@@ -16,9 +37,9 @@ export default class Game {
 
     this.gameStart = false;
     this.timerGo;
+    this.time = undefined;
 
     this.playBtn.addEventListener("click", () => {
-      Sound.playAlert();
       if (!this.gameStart) {
         this.start();
       } else {
@@ -44,9 +65,9 @@ export default class Game {
 
   start() {
     this.gameStart = true;
-    time = REMAIN_TIME;
-
     this.gameField.set();
+    this.time = this.durationTime;
+
     this.countLeftCarrots();
     this.showTimerAndLeftCarrots();
     this.showPauseBtn();
@@ -55,38 +76,36 @@ export default class Game {
 
   stop() {
     this.gameStart = false;
-    Sound.stopBg();
     this.stopTimer();
-    // gameFinishBanner.show("Try again?");
     this.hidePauseBtn();
     this.popUpText && this.popUpText("pause");
+    Sound.stopBg();
   }
 
   finish(text) {
     this.gameStart = false;
-    Sound.stopBg();
     this.showStartBtn();
-    clearInterval(this.timerGo);
-    //gameFinishBanner.show(text);
     this.hidePauseBtn();
     this.stopTimer();
     this.popUpText && this.popUpText(text);
+    Sound.stopBg();
   }
+
   setTimer() {
     this.playTimer();
     this.timerGo = setInterval(this.playTimer, 1000);
   }
 
   playTimer = () => {
-    const minute = Math.floor(time / 60);
-    const second = time % 60;
+    const minute = Math.floor(this.time / 60);
+    const second = this.time % 60;
     this.timer.innerText = `${minute} : ${second}`;
-    if (time <= 0) {
-      Sound.playBug();
+    if (this.time <= 0) {
+      Sound.playAlert();
       this.finish("timeover");
       return;
     }
-    time -= 1;
+    this.time -= 1;
   };
 
   stopTimer() {

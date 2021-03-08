@@ -1,16 +1,14 @@
 "use strict";
 
 import PopUp from "./popup.js";
-import Game from "./game.js";
-
-const CARROT_SIZE = 80;
-const CARROT_COUNT = 10;
-const BUG_SIZE = 50;
-const BUG_COUNT = 10;
-const REMAIN_TIME = 10;
+import GameBuilder from "./game.js";
 
 const gameFinishBanner = new PopUp();
-const game = new Game();
+const game = new GameBuilder()
+  .withCarrotCount(10)
+  .withBugCount(10)
+  .withDurationTime(10)
+  .build();
 
 gameFinishBanner.setClickListener(() => {
   game.start();
