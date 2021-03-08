@@ -3,16 +3,14 @@
 import * as Sound from "./sound.js";
 
 const CARROT_SIZE = 80;
-const CARROT_COUNT = 10;
 const BUG_SIZE = 50;
-const BUG_COUNT = 10;
-
 export default class Field {
-  constructor() {
+  constructor(carrotCount, bugCount) {
     this.carrotSize = CARROT_SIZE;
-    this.carrotCount = CARROT_COUNT;
     this.bugSize = BUG_SIZE;
-    this.bugCount = BUG_COUNT;
+
+    this.carrotCount = carrotCount;
+    this.bugCount = bugCount;
 
     this.carrot = "/img/carrot.png";
     this.bug = "/img/bug.png";

@@ -3,7 +3,13 @@
 import Field from "./field.js";
 import * as Sound from "./sound.js";
 
-export default class GameBuilder {
+export const Reason = Object.freeze({
+  pause: "pause",
+  win: "win",
+  bug: "bug",
+  timeover: "timeover",
+});
+export class GameBuilder {
   withCarrotCount(num) {
     this.carrotCount = num;
     return this;
@@ -25,7 +31,7 @@ export default class GameBuilder {
 }
 class Game {
   constructor(carrotCount, bugCount, durationTime) {
-    this.gameField = new Field();
+    this.gameField = new Field(carrotCount, bugCount);
 
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
@@ -54,7 +60,7 @@ class Game {
       if (item === "carrot") {
         this.countLeftCarrots();
       } else if (item === "bug") {
-        this.finish("bug");
+        this.finish(Reason.bug);
       }
     });
   }
@@ -78,7 +84,7 @@ class Game {
     this.gameStart = false;
     this.stopTimer();
     this.hidePauseBtn();
-    this.popUpText && this.popUpText("pause");
+    this.popUpText && this.popUpText(Reason.pause);
     Sound.stopBg();
   }
 
@@ -102,7 +108,7 @@ class Game {
     this.timer.innerText = `${minute} : ${second}`;
     if (this.time <= 0) {
       Sound.playAlert();
-      this.finish("timeover");
+      this.finish(Reason.timeover);
       return;
     }
     this.time -= 1;
@@ -141,7 +147,7 @@ class Game {
     this.countCarrots.innerText = `${leftCarrots}`;
 
     if (leftCarrots === 0) {
-      this.finish("win");
+      this.finish(Reason.win);
       Sound.playWin();
     }
   }

@@ -1,7 +1,7 @@
 "use strict";
 
 import PopUp from "./popup.js";
-import GameBuilder from "./game.js";
+import { Reason, GameBuilder } from "./game.js";
 
 const gameFinishBanner = new PopUp();
 const game = new GameBuilder()
@@ -16,16 +16,16 @@ gameFinishBanner.setClickListener(() => {
 
 game.chooseTextPopUp((reason) => {
   switch (reason) {
-    case "pause":
+    case Reason.pause:
       gameFinishBanner.show("Try again?");
       break;
-    case "win":
+    case Reason.win:
       gameFinishBanner.show("You Won!");
       break;
-    case "timeover":
+    case Reason.timeover:
       gameFinishBanner.show("Time Over!");
       break;
-    case "bug":
+    case Reason.bug:
       gameFinishBanner.show("You Lost!");
       break;
     default:
