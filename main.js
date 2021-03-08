@@ -1,5 +1,7 @@
 "use strict";
 
+import PopUp from "./popup.js";
+
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 10;
 const BUG_SIZE = 50;
@@ -8,12 +10,10 @@ const REMAIN_TIME = 10;
 
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
+
 const playBtn = document.querySelector(".game__button");
 const timer = document.querySelector(".game__timer");
 const countCarrots = document.querySelector(".game__leftcarrot");
-const popUp = document.querySelector(".pop-up");
-const popUpRefreshBtn = document.querySelector(".pop-up__icon");
-const popUpMessage = popUp.querySelector(".pop-up__message");
 
 const carrot = "/img/carrot.png";
 const bug = "/img/bug.png";
@@ -28,6 +28,8 @@ let time = REMAIN_TIME;
 let gameStart = false;
 let timerGo;
 
+const gameFinishBanner = new PopUp();
+
 function playAudio(sound) {
   sound.currentTime = 0;
   sound.play();
@@ -41,11 +43,6 @@ function hideStopBtn() {
   playBtn.style.visibility = "hidden";
 }
 
-function showPopUp(text) {
-  popUp.classList.remove("pop-up--hide");
-  popUpMessage.innerText = text;
-}
-
 function showStartBtn() {
   const fa_square = playBtn.querySelector("i");
   fa_square.classList.add("fa-play");
@@ -57,6 +54,7 @@ function showPauseBtn() {
   const fa_play = playBtn.querySelector("i");
   fa_play.classList.add("fa-square");
   fa_play.classList.remove("fa-play");
+  playBtn.style.visibility = "visible";
 }
 
 function showTimerAndLeftCarrots() {
@@ -85,7 +83,7 @@ function playTimer() {
   timer.innerText = `${minute}:${second}`;
   if (time <= 0) {
     playAudio(bugSound);
-    finishGame("Try Again?");
+    finishGame("Time Over!");
     return;
   }
   time -= 1;
@@ -155,17 +153,20 @@ function createImg(img, count, className) {
 function finishGame(text) {
   gameStart = false;
   stopAudio(bgSound);
-
+  showStartBtn();
   clearInterval(timerGo);
-  showPopUp(text);
+
+  gameFinishBanner.showPopUp(text);
+
   hideStopBtn();
+  stopTimer();
 }
 
 function stopGame() {
   gameStart = false;
   stopAudio(bgSound);
   stopTimer();
-  showPopUp("Try again?");
+  gameFinishBanner.showPopUp("Try again?");
   hideStopBtn();
 }
 
@@ -173,32 +174,20 @@ function playGame() {
   playAudio(bgSound);
   gameStart = true;
   field.innerHTML = "";
+  time = REMAIN_TIME;
+
   createImg(carrot, CARROT_COUNT, "carrot");
   createImg(bug, BUG_COUNT, "bug");
+
   countLeftCarrots();
   showTimerAndLeftCarrots();
+
   showPauseBtn();
   setTimer();
 }
 
-function handleGame() {
-  if (!gameStart) {
-    playGame();
-  } else {
-    stopGame();
-  }
-}
-
-popUpRefreshBtn.addEventListener("click", () => {
-  time = REMAIN_TIME;
-  gameStart = false;
-
-  playAudio(alertSound);
-
-  popUp.classList.add("pop-up--hide");
-  showStartBtn();
-  stopTimer();
-  handleGame();
+gameFinishBanner.setClickListener(() => {
+  playGame();
 });
 
 field.addEventListener("click", (event) => {
@@ -218,5 +207,9 @@ field.addEventListener("click", (event) => {
 
 playBtn.addEventListener("click", () => {
   playAudio(alertSound);
-  handleGame();
+  if (!gameStart) {
+    playGame();
+  } else {
+    stopGame();
+  }
 });
