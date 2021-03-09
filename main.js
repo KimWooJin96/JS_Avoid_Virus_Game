@@ -5,8 +5,8 @@ import { Reason, GameBuilder } from "./game.js";
 
 const gameFinishBanner = new PopUp();
 const game = new GameBuilder()
-  .withCarrotCount(10)
-  .withBugCount(10)
+  .withPersonCount(10)
+  .withVirusCount(10)
   .withDurationTime(10)
   .build();
 
@@ -25,7 +25,7 @@ game.chooseTextPopUp((reason) => {
     case Reason.timeover:
       gameFinishBanner.show("Time Over!");
       break;
-    case Reason.bug:
+    case Reason.virus:
       gameFinishBanner.show("You Lost!");
       break;
     default:

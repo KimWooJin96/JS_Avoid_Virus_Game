@@ -6,17 +6,17 @@ import * as Sound from "./sound.js";
 export const Reason = Object.freeze({
   pause: "pause",
   win: "win",
-  bug: "bug",
+  virus: "virus",
   timeover: "timeover",
 });
 export class GameBuilder {
-  withCarrotCount(num) {
-    this.carrotCount = num;
+  withPersonCount(num) {
+    this.personCount = num;
     return this;
   }
 
-  withBugCount(num) {
-    this.bugCount = num;
+  withVirusCount(num) {
+    this.virusCount = num;
     return this;
   }
 
@@ -26,20 +26,20 @@ export class GameBuilder {
   }
 
   build() {
-    return new Game(this.carrotCount, this.bugCount, this.durationTime);
+    return new Game(this.personCount, this.virusCount, this.durationTime);
   }
 }
 class Game {
-  constructor(carrotCount, bugCount, durationTime) {
-    this.gameField = new Field(carrotCount, bugCount);
+  constructor(personCount, virusCount, durationTime) {
+    this.gameField = new Field(personCount, virusCount);
 
-    this.carrotCount = carrotCount;
-    this.bugCount = bugCount;
+    this.personCount = personCount;
+    this.virusCount = virusCount;
     this.durationTime = durationTime;
 
     this.playBtn = document.querySelector(".game__button");
     this.timer = document.querySelector(".game__timer");
-    this.countCarrots = document.querySelector(".game__leftcarrot");
+    this.countPeople = document.querySelector(".game__leftperson");
 
     this.gameStart = false;
     this.timerGo;
@@ -57,10 +57,10 @@ class Game {
       if (!this.gameStart) {
         return;
       }
-      if (item === "carrot") {
-        this.countLeftCarrots();
-      } else if (item === "bug") {
-        this.finish(Reason.bug);
+      if (item === "person") {
+        this.countLeftPeople();
+      } else if (item === "virus") {
+        this.finish(Reason.virus);
       }
     });
   }
@@ -74,8 +74,8 @@ class Game {
     this.gameField.set();
     this.time = this.durationTime;
 
-    this.countLeftCarrots();
-    this.showTimerAndLeftCarrots();
+    this.countLeftPeople();
+    this.showTimerAndLeftPeople();
     this.showPauseBtn();
     this.setTimer();
   }
@@ -136,17 +136,17 @@ class Game {
     this.playBtn.style.visibility = "hidden";
   }
 
-  showTimerAndLeftCarrots() {
+  showTimerAndLeftPeople() {
     this.timer.style.visibility = "visible";
-    this.countCarrots.style.visibility = "visible";
+    this.countPeople.style.visibility = "visible";
   }
 
-  countLeftCarrots() {
-    const images = document.querySelectorAll(".carrot");
-    const leftCarrots = images.length;
-    this.countCarrots.innerText = `${leftCarrots}`;
+  countLeftPeople() {
+    const images = document.querySelectorAll(".person");
+    const leftPeople = images.length;
+    this.countPeople.innerText = `${leftPeople}`;
 
-    if (leftCarrots === 0) {
+    if (leftPeople === 0) {
       this.finish(Reason.win);
       Sound.playWin();
     }

@@ -72,7 +72,7 @@ img {
   user-select: none;
 }
 
-.game__leftcarrot {
+.game__leftperson {
   width: 50px;
   height: 50px;
   font-size: 38px;
@@ -131,12 +131,11 @@ img {
   font-size: 38px;
 }
 
-.carrot,
-p .bug {
+.person {
   transition: transform var(--transform-duration) ease-in;
   cursor: pointer;
 }
 
-.carrot:hover {
+.person:hover {
   transform: scale(1.1);
 }
