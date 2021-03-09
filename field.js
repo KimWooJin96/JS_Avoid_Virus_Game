@@ -22,11 +22,11 @@ export default class Field {
   onClick = (event) => {
     const target = event.target;
     if (target.matches(".person")) {
-      Sound.playCarrot();
+      Sound.playPerson();
       this.field.removeChild(target);
       this.onItemClick && this.onItemClick("person");
     } else if (target.matches(".virus")) {
-      Sound.playBug();
+      Sound.playVirus();
       this.onItemClick && this.onItemClick("virus");
     }
   };
@@ -36,7 +36,7 @@ export default class Field {
   }
 
   set() {
-    //Sound.playBg();
+    Sound.playBg();
     this.field.innerHTML = "";
     this.createImg(this.person, this.personCount, "person");
     this.createImg(this.virus, this.virusCount, "virus");
