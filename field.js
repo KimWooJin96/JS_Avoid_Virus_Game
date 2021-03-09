@@ -12,8 +12,10 @@ export default class Field {
     this.personCount = personCount;
     this.virusCount = virusCount;
 
-    this.person = "/img/person.png";
-    this.virus = "/img/virus.png";
+    this.person =
+      "https://user-images.githubusercontent.com/62231339/110432328-4d2a7080-80f2-11eb-9a59-00e27bb29a50.png";
+    this.virus =
+      "https://user-images.githubusercontent.com/62231339/110432329-4dc30700-80f2-11eb-9d07-9feeae1b74fc.png";
     this.field = document.querySelector(".game__field");
     this.fieldRect = this.field.getBoundingClientRect();
     this.field.addEventListener("click", this.onClick);
