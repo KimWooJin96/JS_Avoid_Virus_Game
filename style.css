@@ -31,7 +31,7 @@ img {
   width: var(--game-width);
   height: var(--game-height);
   margin: auto;
-  background-image: url(/img/background.png);
+  background-image: url(/img/background2.jpg);
   background-position: center;
   background-size: cover;
   border-radius: var(--game-border);
@@ -132,12 +132,11 @@ img {
 }
 
 .carrot,
-.bug {
+p .bug {
   transition: transform var(--transform-duration) ease-in;
   cursor: pointer;
 }
 
-.carrot:hover,
-.bug:hover {
+.carrot:hover {
   transform: scale(1.1);
 }

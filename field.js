@@ -12,8 +12,8 @@ export default class Field {
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
 
-    this.carrot = "/img/carrot.png";
-    this.bug = "/img/bug.png";
+    this.carrot = "/img/person.png";
+    this.bug = "/img/virus.png";
     this.field = document.querySelector(".game__field");
     this.fieldRect = this.field.getBoundingClientRect();
     this.field.addEventListener("click", this.onClick);
