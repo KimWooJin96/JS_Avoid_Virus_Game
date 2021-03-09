@@ -7,7 +7,7 @@ Using HTML, CSS, JavaScript
 - Win : Save all people by clicking them
 - Lose :
   - Click any virus
-  - Couldn't save everyone for the rest of the time
+  - Haven't saved everyone in a limited time
 - Pause : Pause the game and start new
 
 ## Skills
